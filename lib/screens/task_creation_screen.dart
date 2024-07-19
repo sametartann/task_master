@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_master/data/db_helper.dart';
 import 'package:task_master/models/task.dart';
-import 'package:task_master/screens/home_screen.dart';
 
 class TaskCreationScreen extends StatefulWidget {
   @override
@@ -29,7 +28,8 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Task'),
+        title: Text('Create Task',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.blueGrey[900],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -55,7 +55,7 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
                   _description = value!;
                 },
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 64),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -75,7 +75,6 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
     );
   }
 
-  // Fetch max id from the database and increment it by 1
   Future<void> _getNextId() async {
     var tasks = await dbHelper.fetchTasks();
     if (tasks.isEmpty) {
@@ -86,11 +85,16 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
     maxId = maxId2 + 1;
   }
 
-
   Future<void> _saveTask() async {
-
-    await dbHelper.insert(Task.withId(
-        maxId, _title, _description, TaskStatus.newTask
-    ));
+    var newTask = Task.withId(
+      maxId,
+      _title,
+      _description,
+      TaskStatus.newTask,
+      DateTime.now(),
+      null,
+      null,
+    );
+    await dbHelper.insert(newTask);
   }
 }

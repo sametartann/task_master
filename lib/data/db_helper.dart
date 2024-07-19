@@ -20,7 +20,7 @@ class DbHelper {
 
   void createDb(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskStatus INTEGER)"
+        "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskStatus INTEGER, creationDateTime TEXT, processingStartDateTime TEXT, completedDateTime TEXT)"
     );
   }
 
@@ -47,4 +47,10 @@ class DbHelper {
     Database db = await this.db;
     await db.update("tasks", task.toMap(), where: "id = ?", whereArgs: [task.id]);
   }
+
+  Future<void> deleteTask(int id) async {
+    Database db = await this.db;
+    await db.delete("tasks", where: "id = ?", whereArgs: [id]);
+  }
+
 }
