@@ -90,7 +90,7 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
   Future<void> _saveTask() async {
 
     await dbHelper.insert(Task.withId(
-        maxId, _title, _description, 0
+        maxId, _title, _description, TaskStatus.newTask
     ));
   }
 }

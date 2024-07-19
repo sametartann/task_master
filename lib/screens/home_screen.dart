@@ -49,21 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = _tasks[index];
           return ListTile(
             title: Text(task.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            subtitle: Text(task.description),
-            trailing: Checkbox(
-              value: task.completed == 1,
-              onChanged: (value) {
-                setState(() {
-                  task.completed = value! ? 1 : 0;
-                });
-                _updateTask(task);
-              },
-            ),
+            subtitle: Text('${task.description}\nStatus: ${task.taskStatus.toString().split('.').last}'), // Display task status
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TaskDetailScreen(taskId: task.id,),
+                  builder: (context) => TaskDetailScreen(taskId: task.id),
                 ),
               ).then((_) {
                 _fetchTasks();
@@ -85,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 
   Future<void> _updateTask(Task task) async {
     await dbHelper.update(task);

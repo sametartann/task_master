@@ -7,24 +7,26 @@ class DbHelper {
 
   var _db;
 
-  Future<Database> get db async{
+  Future<Database> get db async {
     _db ??= await initializeDb();
     return _db;
   }
 
   Future<Database> initializeDb() async {
     String dbPath = join(await getDatabasesPath(), "task_master.db");
-    var taskMasterDb = await openDatabase(dbPath, version: 1, onCreate: createDb,);
+    var taskMasterDb = await openDatabase(dbPath, version: 1, onCreate: createDb);
     return taskMasterDb;
   }
 
   void createDb(Database db, int version) async {
-    await db.execute("CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, completed INTEGER)");
+    await db.execute(
+        "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskStatus INTEGER)"
+    );
   }
 
   Future<List<Task>> fetchTasks() async {
     Database db = await this.db;
-    var result = await db.query("tasks", orderBy: "id ");
+    var result = await db.query("tasks", orderBy: "id");
     return List.generate(result.length, (index) {
       return Task.fromObject(result[index]);
     });
@@ -32,21 +34,17 @@ class DbHelper {
 
   Future<Task> fetchTask(int taskId) async {
     Database db = await this.db;
-    var result = await db.query("tasks" , where: 'id = ?',
-      whereArgs: [taskId],);
+    var result = await db.query("tasks", where: 'id = ?', whereArgs: [taskId]);
     return Task.fromObject(result[0]);
-
   }
 
-  Future<int> insert(Task task) async {
+  Future<void> insert(Task task) async {
     Database db = await this.db;
-    var result = await db.insert("tasks", task.toMap());
-    return result;
+    await db.insert("tasks", task.toMap());
   }
 
-  Future<int> update(Task task) async {
+  Future<void> update(Task task) async {
     Database db = await this.db;
-    var result = await db.update("tasks", task.toMap(), where: "id = ?", whereArgs: [task.id]);
-    return result;
+    await db.update("tasks", task.toMap(), where: "id = ?", whereArgs: [task.id]);
   }
 }

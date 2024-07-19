@@ -1,20 +1,22 @@
+enum TaskStatus { newTask, processing, completed }
+
 class Task {
   late int id;
   late String title;
   late String description;
-  late int completed;
+  late TaskStatus taskStatus;
 
-  Task({required this.title, required this.description,  required this.completed}){
+  Task({required this.title, required this.description,  required this.taskStatus}){
     id = 1;
   }
 
-  Task.withId(this.id, this.title, this.description, this.completed);
+  Task.withId(this.id, this.title, this.description, this.taskStatus);
 
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     map["title"] = title;
     map["description"] = description;
-    map["completed"] = completed;
+    map["taskStatus"] = taskStatus.index;
     if (id != null){
       map["id"] = id;
     }
@@ -25,6 +27,6 @@ class Task {
     this.id = int.tryParse(o["id"].toString())!;
     this.title = o["title"];
     this.description = o["description"];
-    this.completed = int.tryParse(o["completed"].toString())!;
+    this.taskStatus = TaskStatus.values[int.tryParse(o["taskStatus"].toString())!];
   }
 }

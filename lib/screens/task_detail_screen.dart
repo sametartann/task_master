@@ -44,26 +44,32 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _task!.title ?? '',
+              _task!.title,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
             Text(
-              _task!.description ?? '',
+              _task!.description,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 16),
             Row(
               children: [
-                Text('Completed: '),
-                Checkbox(
-                  value: _task!.completed == 1,
-                  onChanged: (value) {
+                Text('Status: '),
+                DropdownButton<TaskStatus>(
+                  value: _task!.taskStatus,
+                  onChanged: (TaskStatus? newValue) {
                     setState(() {
-                      _task!.completed = value! ? 1 : 0;
+                      _task!.taskStatus = newValue!;
                     });
                     _updateTask();
                   },
+                  items: TaskStatus.values.map<DropdownMenuItem<TaskStatus>>((TaskStatus value) {
+                    return DropdownMenuItem<TaskStatus>(
+                      value: value,
+                      child: Text(value.toString().split('.').last),
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -73,6 +79,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
           : Center(child: CircularProgressIndicator()),
     );
   }
+
 
   Future<void> _updateTask() async {
     await dbHelper.update(_task!);
