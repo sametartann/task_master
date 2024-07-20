@@ -100,6 +100,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                           child: Text(_getTaskStatusString(value)),
                         );
                       }).toList(),
+                      // extend the width dropdown to the right of the screen
+                      underline: Container(
+                        height: 2,
+                        color: Colors.blueGrey[900],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                   ],
                 ),
