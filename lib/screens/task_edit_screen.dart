@@ -36,7 +36,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Task',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text('Edit Task',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueGrey[900],
       ),
       body: Padding(
@@ -47,7 +47,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
             children: [
               TextFormField(
                 initialValue: _title,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a title';
@@ -60,15 +60,15 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
               ),
               TextFormField(
                 initialValue: _description,
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 onSaved: (value) {
                   _description = value!;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: [
-                  Text('Status: '),
+                  const Text('Status: '),
                   DropdownButton<TaskStatus>(
                     value: _taskStatus,
                     onChanged: (TaskStatus? newValue) {
@@ -90,7 +90,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -99,7 +99,7 @@ class _TaskEditScreenState extends State<TaskEditScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Update Task'),
+                child: const Text('Update Task'),
               ),
             ],
           ),

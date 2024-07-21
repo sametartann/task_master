@@ -4,7 +4,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:task_master/models/task.dart';
 
 class DbHelper {
-
   var _db;
 
   Future<Database> get db async {
@@ -14,7 +13,12 @@ class DbHelper {
 
   Future<Database> initializeDb() async {
     String dbPath = join(await getDatabasesPath(), "task_master.db");
-    var taskMasterDb = await openDatabase(dbPath, version: 1, onCreate: createDb);
+    var taskMasterDb = await openDatabase(
+      dbPath,
+      version: 1,
+      onCreate: createDb,
+      onUpgrade: upgradeDb,
+    );
     return taskMasterDb;
   }
 
@@ -22,6 +26,12 @@ class DbHelper {
     await db.execute(
         "CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT, description TEXT, taskStatus INTEGER, creationDateTime TEXT, processingStartDateTime TEXT, completedDateTime TEXT)"
     );
+  }
+
+  void upgradeDb(Database db, int oldVersion, int newVersion) async {
+    /*if (oldVersion < 2) {
+      await db.execute("ALTER TABLE tasks ADD COLUMN creationDateTime TEXT");
+    }*/
   }
 
   Future<List<Task>> fetchTasks() async {
@@ -52,5 +62,4 @@ class DbHelper {
     Database db = await this.db;
     await db.delete("tasks", where: "id = ?", whereArgs: [id]);
   }
-
 }

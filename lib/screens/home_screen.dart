@@ -11,7 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var dbHelper = DbHelper();
-  late List<Task> _tasks;
+  late List<Task> _tasks = [];
   int taskCount = 0;
 
   @override
@@ -39,10 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('TaskMaster', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text(
+          'TaskMaster',
+          style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.blueGrey[900],
       ),
-      body: ListView.builder(
+      body: taskCount > 0
+          ? ListView.builder(
         itemCount: taskCount,
         itemBuilder: (context, int index) {
           final task = _tasks[index];
@@ -50,7 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Dismissible(
                 key: Key(task.id.toString()),
-                background: Container(color: Colors.red, child: Icon(Icons.delete, color: Colors.white,)),
+                background: Container(
+                  color: Colors.red,
+                  child: const Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  ),
+                ),
                 confirmDismiss: (direction) async {
                   return await showDialog(
                     context: context,
@@ -82,27 +92,62 @@ class _HomeScreenState extends State<HomeScreen> {
                     _tasks.removeAt(index);
                     taskCount--;
                   });
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${task.title} deleted!"), duration: Duration(seconds: 3), backgroundColor: Colors.red,));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("${task.title} deleted!"),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 },
-                child: ListTile(
-                  title: Text(task.title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  subtitle: Text('${task.description}\nStatus: ${_getTaskStatusString(task.taskStatus)}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TaskDetailScreen(taskId: task.id),
-                      ),
-                    ).then((_) {
-                      _fetchTasks();
-                    });
-                  },
+                child: Container(
+                  color: _getTaskBackgroundColor(task.taskStatus),
+                  child: ListTile(
+                    title: Text(
+                      task.title,
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text('${task.description}\nStatus: ${_getTaskStatusString(task.taskStatus)}'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TaskDetailScreen(taskId: task.id),
+                        ),
+                      ).then((_) {
+                        _fetchTasks();
+                      });
+                    },
+                  ),
                 ),
               ),
-              Divider(), // Add a divider between tasks
+              Divider(),
             ],
           );
         },
+      )
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              'No tasks available',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TaskCreationScreen()),
+                ).then((_) {
+                  _fetchTasks();
+                });
+              },
+              child: const Text('Create First Task'),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -113,9 +158,22 @@ class _HomeScreenState extends State<HomeScreen> {
             _fetchTasks();
           });
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Color _getTaskBackgroundColor(TaskStatus status) {
+    switch (status) {
+      case TaskStatus.newTask:
+        return Colors.grey[50]!;
+      case TaskStatus.processing:
+        return Colors.blue[100]!;
+      case TaskStatus.completed:
+        return Colors.green[100]!;
+      default:
+        return Colors.white;
+    }
   }
 
   String _getTaskStatusString(TaskStatus status) {

@@ -36,11 +36,11 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Task Details',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text('Task Details',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueGrey[900],
         actions: [
           IconButton(
-            icon: Icon(Icons.edit , color: Colors.white,),
+            icon: const Icon(Icons.edit , color: Colors.white,),
             onPressed: () {
               Navigator.push(
                 context,
@@ -64,23 +64,23 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
               children: [
                 Text(
                   _task!.title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   _task!.description,
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 64),
+                const SizedBox(height: 64),
                 Text('Creation: ${_task!.creationDateTime.toString().substring(0, 19)}', style: const TextStyle(fontSize: 15, )),
                 if (_task!.processingStartDateTime != null)
                   Text('Processing: ${_task!.processingStartDateTime.toString().substring(0, 19)}'),
                 if (_task!.completedDateTime != null)
                   Text('Completed: ${_task!.completedDateTime.toString().substring(0, 19)}'),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
                 Row(
                   children: [
-                    Text('Status: '),
+                    const Text('Status: '),
                     DropdownButton<TaskStatus>(
                       value: _task!.taskStatus,
                       onChanged: (TaskStatus? newValue) {
@@ -114,7 +114,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     ),
 
           )
-          : Center(child: CircularProgressIndicator()),
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 

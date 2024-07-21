@@ -48,16 +48,16 @@ class Task {
   }
 
   Task.fromObject(dynamic o) {
-    this.id = int.tryParse(o["id"].toString())!;
-    this.title = o["title"];
-    this.description = o["description"];
-    this.taskStatus = TaskStatus.values[int.tryParse(o["taskStatus"].toString())!];
-    this.creationDateTime = DateTime.parse(o["creationDateTime"]);
+    id = int.tryParse(o["id"].toString())!;
+    title = o["title"];
+    description = o["description"];
+    taskStatus = TaskStatus.values[int.tryParse(o["taskStatus"].toString())!];
+    creationDateTime = DateTime.parse(o["creationDateTime"]);
     if (o["processingStartDateTime"] != null) {
-      this.processingStartDateTime = DateTime.parse(o["processingStartDateTime"]);
+      processingStartDateTime = DateTime.parse(o["processingStartDateTime"]);
     }
     if (o["completedDateTime"] != null) {
-      this.completedDateTime = DateTime.parse(o["completedDateTime"]);
+      completedDateTime = DateTime.parse(o["completedDateTime"]);
     }
   }
 }

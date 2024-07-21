@@ -28,7 +28,7 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Task',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text('Create Task',style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.blueGrey[900],
       ),
       body: Padding(
@@ -38,7 +38,7 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a title';
@@ -50,12 +50,12 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 onSaved: (value) {
                   _description = value!;
                 },
               ),
-              SizedBox(height: 64),
+              const SizedBox(height: 64),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -66,7 +66,7 @@ class _TaskCreationScreenState extends State<TaskCreationScreen> {
                     });
                   }
                 },
-                child: Text('Save Task'),
+                child: const Text('Save Task'),
               ),
             ],
           ),
